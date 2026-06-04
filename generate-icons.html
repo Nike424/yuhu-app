@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>愈见 图标生成器</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; background: #F6F4F1; }
+    h1 { font-size: 20px; margin-bottom: 8px; }
+    p { color: #666; font-size: 14px; margin-bottom: 20px; }
+    .btn { display: inline-block; padding: 12px 24px; background: #1A4F7A; color: #fff; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; margin: 6px 8px 6px 0; }
+    .btn:hover { background: #2563EB; }
+    .preview { display: flex; gap: 16px; align-items: center; margin: 20px 0; }
+    .preview img { width: 96px; height: 96px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    .status { padding: 12px; border-radius: 10px; margin-top: 16px; font-size: 13px; }
+    .status.success { background: #E6FAF7; color: #0D9488; }
+    .status.info { background: #EEF4FF; color: #2563EB; }
+    canvas { display: none; }
+  </style>
+</head>
+<body>
+  <h1>愈见 YuJian — 图标生成器</h1>
+  <p>点击下方按钮生成 icon-192.png 和 icon-512.png，自动保存到下载目录。</p>
+  <div class="preview">
+    <img id="preview-img" alt="preview">
+    <div>
+      <p style="margin:0;font-weight:600;color:#1A1D28">预览</p>
+      <p style="margin:4px 0 0;font-size:12px">将 icon.svg 渲染为 PNG</p>
+    </div>
+  </div>
+  <div>
+    <button class="btn" onclick="generatePNG(192)">⬇ 下载 192×192</button>
+    <button class="btn" onclick="generatePNG(512)">⬇ 下载 512×512</button>
+    <button class="btn" onclick="generateAll()" style="background:#0D9488">⬇ 一键全部下载</button>
+  </div>
+  <div id="status" class="status info" style="margin-top:20px">准备就绪，点击下载按钮开始生成</div>
+  <canvas id="canvas-192" width="192" height="192"></canvas>
+  <canvas id="canvas-512" width="512" height="512"></canvas>
+
+  <script>
+    // 直接内嵌 SVG 为 data URL，避免 file:// 协议跨域限制
+    const svgData = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0C2D4A"/>
+      <stop offset="45%" stop-color="#1A4F7A"/>
+      <stop offset="100%" stop-color="#0A8F7F"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0.6" y2="0.6">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <rect width="1024" height="1024" rx="228" fill="url(#shine)"/>
+  <path d="M512 180 L748 280 C760 285 768 298 768 312 L768 520 C768 668 660 786 512 836 C364 786 256 668 256 520 L256 312 C256 298 264 285 276 280 Z" fill="#fff" filter="url(#glow)"/>
+  <rect x="462" y="340" width="100" height="260" rx="24" fill="#14476A"/>
+  <rect x="382" y="420" width="260" height="100" rx="24" fill="#14476A"/>
+  <circle cx="452" cy="296" r="28" fill="#0FA594"/>
+  <circle cx="512" cy="276" r="32" fill="#0FA594"/>
+  <circle cx="572" cy="296" r="28" fill="#0FA594"/>
+</svg>`;
+
+    const dataUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+    const statusEl = document.getElementById('status');
+    const previewImg = document.getElementById('preview-img');
+    const img = new Image();
+    let ready = false;
+
+    img.onload = () => {
+      previewImg.src = dataUrl;
+      ready = true;
+      statusEl.textContent = '✅ 图标已加载，点击下载按钮';
+      statusEl.className = 'status success';
+    };
+
+    img.onerror = () => {
+      statusEl.textContent = '❌ 图标加载失败';
+    };
+
+    img.src = dataUrl;
+
+    async function generatePNG(size) {
+      if (!ready) { statusEl.textContent = '❌ 图标未加载，请刷新'; return; }
+      const canvas = document.getElementById(`canvas-${size}`);
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, size, size);
+      ctx.drawImage(img, 0, 0, size, size);
+
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `icon-${size}.png`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          statusEl.textContent = `✅ icon-${size}.png 已下载`;
+          statusEl.className = 'status success';
+          resolve();
+        }, 'image/png');
+      });
+    }
+
+    async function generateAll() {
+      if (!ready) { statusEl.textContent = '❌ 图标未加载，请刷新'; return; }
+      statusEl.textContent = '⏳ 正在生成...';
+      await generatePNG(192);
+      await new Promise(r => setTimeout(r, 800));
+      await generatePNG(512);
+      statusEl.textContent = '✅ 全部下载完成！请将 PNG 文件移动到 app/ 目录';
+      statusEl.className = 'status success';
+    }
+  </script>
+</body>
+</html>

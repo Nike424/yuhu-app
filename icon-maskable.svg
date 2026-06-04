@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <!-- Maskable icon: no background, content in safe zone (inner 66%) -->
+  <!-- Background circle for maskable -->
+  <circle cx="512" cy="512" r="512" fill="#1A4F7A"/>
+
+  <!-- Shield -->
+  <path d="M512 240 L680 314 C688 317 693 326 693 335 L693 490 C693 600 616 688 512 724 C408 688 331 600 331 490 L331 335 C331 326 336 317 344 314 Z" fill="#fff" opacity="0.95"/>
+
+  <!-- Medical cross -->
+  <rect x="476" y="380" width="72" height="188" rx="14" fill="#1A4F7A"/>
+  <rect x="418" y="438" width="188" height="72" rx="14" fill="#1A4F7A"/>
+
+  <!-- Paw prints -->
+  <circle cx="462" cy="348" r="19" fill="#0D9488"/>
+  <circle cx="512" cy="332" r="22" fill="#0D9488"/>
+  <circle cx="562" cy="348" r="19" fill="#0D9488"/>
+</svg>

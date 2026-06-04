@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>愈见 - 离线中</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #F6F4F1; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 24px; }
+    .card { text-align: center; max-width: 320px; }
+    .icon { width: 80px; height: 80px; border-radius: 24px; background: linear-gradient(135deg, #1A4F7A, #0A8F7F); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
+    h1 { font-size: 20px; color: #1A1D28; margin: 0 0 8px; }
+    p { color: #666; font-size: 14px; line-height: 1.6; }
+    button { margin-top: 20px; padding: 12px 32px; background: #1A4F7A; color: #fff; border: none; border-radius: 10px; font-size: 15px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" opacity="0.3"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <h1>愈见 YuJian</h1>
+    <p>当前无法连接网络<br>请检查网络设置后重试</p>
+    <button onclick="location.reload()">重新加载</button>
+  </div>
+</body>
+</html>

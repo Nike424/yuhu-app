@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0C2D4A"/>
+      <stop offset="45%" stop-color="#1A4F7A"/>
+      <stop offset="100%" stop-color="#0A8F7F"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0.6" y2="0.6">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+
+  <!-- Subtle shine overlay -->
+  <rect width="1024" height="1024" rx="228" fill="url(#shine)"/>
+
+  <!-- Shield shape -->
+  <path d="M512 180 L748 280 C760 285 768 298 768 312 L768 520 C768 668 660 786 512 836 C364 786 256 668 256 520 L256 312 C256 298 264 285 276 280 Z" fill="#fff" filter="url(#glow)"/>
+
+  <!-- Medical cross -->
+  <rect x="462" y="340" width="100" height="260" rx="24" fill="#14476A"/>
+  <rect x="382" y="420" width="260" height="100" rx="24" fill="#14476A"/>
+
+  <!-- Paw print (3 toe beans above cross) -->
+  <circle cx="452" cy="296" r="28" fill="#0FA594"/>
+  <circle cx="512" cy="276" r="32" fill="#0FA594"/>
+  <circle cx="572" cy="296" r="28" fill="#0FA594"/>
+</svg>
