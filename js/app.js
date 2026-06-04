@@ -1497,36 +1497,6 @@ const Auth = {
     }, 1200);
   },
 
-  async sendCode(type) {
-    const phoneId = type === 'login' ? 'login-phone' : type === 'reg' ? 'reg-phone' : 'forgot-phone';
-    const btnId = type === 'login' ? 'login-send-code' : type === 'reg' ? 'reg-send-code' : 'forgot-send-code';
-    const phone = document.getElementById(phoneId).value.trim();
-
-    if (!/^1[3-9]\d{9}$/.test(phone)) {
-      const input = document.getElementById(phoneId);
-      if (input && typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(input);
-      Utils.toast('请输入有效的手机号码', 'error');
-      return;
-    }
-
-    const btn = document.getElementById(btnId);
-    btn.disabled = true;
-    let seconds = 60;
-    btn.textContent = `${seconds}s`;
-
-    this._countdownTimers[type] = setInterval(() => {
-      seconds--;
-      if (seconds <= 0) {
-        clearInterval(this._countdownTimers[type]);
-        btn.disabled = false;
-        btn.textContent = '获取验证码';
-      } else {
-        btn.textContent = `${seconds}s`;
-      }
-    }, 1000);
-
-    Utils.toast('验证码已发送（演示模式：任意6位数字均可）', 'success');
-  },
 
   /* ========== Supabase 通用登录 ========== */
 
@@ -1595,41 +1565,6 @@ const Auth = {
     return null;
   },
 
-  async login() {
-    const phone = document.getElementById('login-phone').value.trim();
-    const code = document.getElementById('login-code').value.trim();
-    const btn = document.getElementById('btn-login-phone');
-
-    if (!/^1[3-9]\d{9}$/.test(phone)) {
-      const input = document.getElementById('login-phone');
-      if (input && typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(input);
-      Utils.toast('请输入有效的手机号码', 'error'); return;
-    }
-    if (!/^\d{6}$/.test(code)) {
-      const input = document.getElementById('login-code');
-      if (input && typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(input);
-      Utils.toast('请输入6位验证码', 'error'); return;
-    }
-
-    if (typeof AuthAnim !== 'undefined' && btn) AuthAnim.setButtonLoading(btn, true);
-
-    // 尝试通过 Supabase 建立会话
-    const sbEmail = `${phone}@yujian.app`;
-    const sbUser = await this._ensureSupabaseUser(sbEmail, '宠物主人');
-
-    if (sbUser) {
-      await DB.saveSetting('auth_session', { token: sbUser.token || Utils.uid(), user: sbUser });
-      if (typeof AuthAnim !== 'undefined' && btn) AuthAnim.setButtonLoading(btn, false);
-      this._loginSuccess(sbUser);
-    } else {
-      // Supabase 不可用时降级为本地登录
-      await new Promise(r => setTimeout(r, 600));
-      const user = { phone, name: '宠物主人', id: Utils.uid() };
-      await DB.saveSetting('auth_session', { token: Utils.uid(), user });
-      if (typeof AuthAnim !== 'undefined' && btn) AuthAnim.setButtonLoading(btn, false);
-      this._loginSuccess(user);
-    }
-  },
 
   async loginWithPassword() {
     const email = document.getElementById('login-email').value.trim();
@@ -1703,43 +1638,13 @@ const Auth = {
     }
   },
 
-  async registerWithPhone() {
-    const name = document.getElementById('reg-name').value.trim();
-    const phone = document.getElementById('reg-phone').value.trim();
-    const code = document.getElementById('reg-code').value.trim();
-    const password = document.getElementById('reg-password').value;
-
-    if (!name) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('reg-name')); Utils.toast('请输入昵称', 'error'); return; }
-    if (!/^1[3-9]\d{9}$/.test(phone)) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('reg-phone')); Utils.toast('请输入有效的手机号码', 'error'); return; }
-    if (!/^\d{6}$/.test(code)) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('reg-code')); Utils.toast('请输入6位验证码', 'error'); return; }
-    if (password.length < 6) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('reg-password')); Utils.toast('密码至少6位', 'error'); return; }
-
-    // 通过 Supabase 建立会话
-    const sbEmail = `${phone}@yujian.app`;
-    const sbUser = await this._ensureSupabaseUser(sbEmail, name);
-
-    if (sbUser) {
-      await DB.saveSetting('auth_session', { token: sbUser.token || Utils.uid(), user: sbUser });
-      this._loginSuccess(sbUser);
-    } else {
-      // Supabase 不可用时降级
-      await new Promise(r => setTimeout(r, 600));
-      const user = { phone, name, id: Utils.uid() };
-      await DB.saveSetting('auth_session', { token: Utils.uid(), user });
-      this._loginSuccess(user);
-    }
-  },
 
   async resetPassword() {
-    const phone = document.getElementById('forgot-phone').value.trim();
-    const code = document.getElementById('forgot-code').value.trim();
-    const newPass = document.getElementById('forgot-new-pass').value;
+    const email = document.getElementById('forgot-email').value.trim();
 
-    if (!/^1[3-9]\d{9}$/.test(phone)) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('forgot-phone')); Utils.toast('请输入有效的手机号码', 'error'); return; }
-    if (!/^\d{6}$/.test(code)) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('forgot-code')); Utils.toast('请输入6位验证码', 'error'); return; }
-    if (newPass.length < 6) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('forgot-new-pass')); Utils.toast('密码至少6位', 'error'); return; }
+    if (!email) { if (typeof AuthAnim !== 'undefined') AuthAnim.shakeInput(document.getElementById('forgot-email')); Utils.toast('请输入邮箱', 'error'); return; }
 
-    Utils.toast('密码重置成功，请登录', 'success');
+    Utils.toast('重置链接已发送到邮箱，请查收', 'success');
     this.switchTab('login');
   },
 
@@ -1756,18 +1661,6 @@ const Auth = {
       this._loginSuccess({ ...sbUser, provider });
     } else {
       const user = { name: displayName, id: Utils.uid(), provider };
-      await DB.saveSetting('auth_session', { token: Utils.uid(), user });
-      this._loginSuccess(user);
-    }
-  }
-};
-
-/* ========== Bootstrap ========== */
-document.addEventListener('DOMContentLoaded', () => App.init());
-
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal-overlay')) e.target.classList.add('hidden');
-});
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});

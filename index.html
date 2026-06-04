@@ -198,22 +198,6 @@
       <span style="color:var(--ink-muted);font-size:12px;cursor:pointer" onclick="Auth.switchTab('forgot')">忘记密码？</span>
     </div>
 
-    <div class="auth-divider">或使用手机验证码（演示模式）</div>
-
-    <div class="input-wrap">
-      <input type="tel" id="login-phone" class="input" placeholder=" " maxlength="11">
-      <label class="input-label">手机号码</label>
-      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-    </div>
-    <div class="input-row">
-      <div class="input-wrap" style="flex:1">
-        <input type="text" id="login-code" class="input" placeholder=" " maxlength="6">
-        <label class="input-label">验证码</label>
-        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
-      <button id="login-send-code" class="btn btn-outline btn-code" onclick="Auth.sendCode('login')">获取验证码</button>
-    </div>
-    <button id="btn-login-phone" class="btn btn-outline btn-block" onclick="Auth.login()">手机号登录（演示）</button>
   </div>
 
   <!-- 注册表单 -->
@@ -241,23 +225,6 @@
       注册账号
     </button>
 
-    <div class="auth-divider">或使用手机号（演示模式）</div>
-
-    <div class="input-wrap">
-      <input type="tel" id="reg-phone" class="input" placeholder=" " maxlength="11">
-      <label class="input-label">手机号码</label>
-      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-    </div>
-    <div class="input-row">
-      <div class="input-wrap" style="flex:1">
-        <input type="text" id="reg-code" class="input" placeholder=" " maxlength="6">
-        <label class="input-label">验证码</label>
-        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
-      <button id="reg-send-code" class="btn btn-outline btn-code" onclick="Auth.sendCode('reg')">获取验证码</button>
-    </div>
-    <button class="btn btn-outline btn-block" onclick="Auth.registerWithPhone()">手机号注册（演示）</button>
-
     <div class="auth-divider">或</div>
 
     <div class="social-login">
@@ -275,25 +242,13 @@
 
   <!-- 找回密码 -->
   <div id="auth-forgot" class="auth-form">
+    <p class="caption" style="margin-bottom:16px;text-align:center">输入注册邮箱，我们将发送重置链接</p>
     <div class="input-wrap">
-      <input type="tel" id="forgot-phone" class="input" placeholder=" " maxlength="11">
-      <label class="input-label">手机号码</label>
-      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      <input type="email" id="forgot-email" class="input" placeholder=" ">
+      <label class="input-label">邮箱地址</label>
+      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </div>
-    <div class="input-row">
-      <div class="input-wrap" style="flex:1">
-        <input type="text" id="forgot-code" class="input" placeholder=" " maxlength="6">
-        <label class="input-label">验证码</label>
-        <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      </div>
-      <button id="forgot-send-code" class="btn btn-outline btn-code" onclick="Auth.sendCode('forgot')">获取验证码</button>
-    </div>
-    <div class="input-wrap">
-      <input type="password" id="forgot-new-pass" class="input" placeholder=" ">
-      <label class="input-label">新密码</label>
-      <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-    </div>
-    <button class="btn btn-primary btn-block" onclick="Auth.resetPassword()" style="margin-top:4px">重置密码</button>
+    <button class="btn btn-primary btn-block" onclick="Auth.resetPassword()" style="margin-top:4px">发送重置链接</button>
     <div style="text-align:center;margin-top:12px">
       <span style="color:var(--blue);font-size:12px;cursor:pointer;font-weight:600" onclick="Auth.switchTab('login')">← 返回登录</span>
     </div>
