@@ -1660,7 +1660,21 @@ const Auth = {
       await DB.saveSetting('auth_session', { token: sbUser.token || Utils.uid(), user: { ...sbUser, provider } });
       this._loginSuccess({ ...sbUser, provider });
     } else {
+      // Supabase 未配置，降级为本地注册
+      await new Promise(r => setTimeout(r, 800));
       const user = { name: displayName, id: Utils.uid(), provider };
+      await DB.saveSetting('auth_session', { token: Utils.uid(), user });
+      this._loginSuccess(user);
+    }
+  }
+};
+
+/* ═══════════════════════════════════════════
+   启动入口
+   ═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  App.init();
+});
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
